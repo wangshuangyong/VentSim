@@ -1,0 +1,146 @@
+using System;
+
+namespace CSharpConsole
+{
+
+  public class 场景
+  {
+  [STAThread]
+  public static void Main(string[] args)
+  {
+  Console.WriteLine("场景开始了....");
+
+  // 生成小王
+
+  小王 w = new 小王();
+
+  // 生成小账
+
+  小张 z = new 小张();
+
+  // 指定监视
+
+  z.PlayGame += new PlayGameHandler(w.扣钱);
+
+  // 开始玩游戏
+
+  z.玩游戏();
+
+  console.writeline("场景结束...");
+
+  Console.ReadLine();
+
+  }
+
+  }
+
+  // 负责扣钱的人
+
+  public class 小王
+  {
+
+  public 小王()
+  {
+
+  Console.WriteLine("生成小王...");
+
+  }
+
+  public void 扣钱(object sender, EventArgs e)
+  {
+
+  Console.WriteLine("小王：好小子，上班时间胆敢玩游戏...");
+
+  Console.WriteLine("小王：看看你小子有多少钱...");
+
+  小张 f = (小张)sender;
+
+  Console.WriteLine("小张的钱： " + f.钱.ToString());
+
+  Console.WriteLine("开始扣钱......");
+
+  System.Threading.Thread.Sleep(500);
+
+  f.钱 = f.钱 - 500;
+
+  Console.WriteLine("扣完了....现在小张还剩下：" + f.钱.ToString());
+
+  }
+
+  }
+
+  // 如果玩游戏，则引发事件
+
+  public class 小张
+  {
+
+  // 先定义一个事件，这个事件表示“小张”在玩游戏。
+
+  public event PlayGameHandler PlayGame;
+
+  // 保存小张钱的变量
+
+  private int m_Money;
+
+  public 小张()
+  {
+
+  Console.WriteLine("生成小张....");
+
+  m_Money = 1000; // 构造函数，初始化小张的钱。
+
+  }
+
+  public int 钱 // 此属性可以操作小张的钱。
+  {
+
+  get
+  {
+
+  return m_Money;
+
+  }
+
+  set
+  {
+
+  m_Money = value;
+
+  }
+
+  }
+
+  public void 玩游戏()
+  {
+
+  Console.WriteLine("小张开始玩游戏了.....");
+
+  Console.WriteLine("小张:CS好玩，哈哈哈！ 我玩.....");
+
+  System.Threading.Thread.Sleep(500);
+
+  System.EventArgs e = new EventArgs();
+
+  OnPlayGame(e);
+
+  }
+
+  protected virtual void OnPlayGame(EventArgs e)
+  {
+
+  if (PlayGame != null)
+  {
+
+  PlayGame(this, e);
+
+  }
+
+  }
+
+  }
+
+  // 定义委托处理程序
+
+  public delegate void PlayGameHandler(object sender, System.EventArgs e);
+
+}
